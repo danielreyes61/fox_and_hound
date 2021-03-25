@@ -3,23 +3,22 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from time import sleep
+from bs4 import BeautifulSoup
+import time
+
 
 options = webdriver.ChromeOptions()
-options.add_experimental_option('excludeSwitches', ['enable-logging'])
+options.add_experimental_option('excludeSwitches', ['enable-logging']) # used to suppress random Bluetooth usb device warnings passed through chrome while using selenium
+
 options.headless = True
 DRIVER_PATH = './chromedriver'
-
-
 driver = webdriver.Chrome(executable_path=DRIVER_PATH, options=options)
 driver.get('https://www.watkinsrealestateteam.com/listings-search/')
+#time.sleep(3)
 
+html = driver.page_source
 
-title = driver.find_element_by_xpath("/html/head/title")
-listing_details = driver.find_element_by_xpath("//*[@id=\"pl_listings\"]/div/div[2]/article[2]/div/div/div/h3/a")
-print(title.get_attribute('text'))
-
-print(listing_details.get_attribute('text'))
-
+soup = BeautifulSoup(html,'lxml')
+title = soup.select('span.pl_listing-mlsId')
+mls_nums = [item.text for item in title]
+print(mls_nums)
