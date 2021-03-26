@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Fox and Hound</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -29,36 +29,52 @@
         font-size: medium;
     }
     
+    p {
+      color: #79b8ff;
+    }
+
+    h2 {
+      color: #cdd9e5
+    }
 
   </style>
 </head>
 <body>
 <p>
+    <h2>Watkins Real Estate Team</h2>
 
     <table class = "table table-responsive w-auto" style="width:100%">
         <tr>
           <th>MLS Number</th>
+            {% for item in mls %}
+            
+                <td>{{item}}</td>
+        
+            {% endfor %}
+
+        </tr>
+        <tr>
+          <th>Image</th>
+            {% for item in listing_image %}
+            
+                <td><img class="img-responsive" src="{{item}}" alt="placeholder" width=100% height=100%></td>     
+            {% endfor %}
+
+        </tr>
+
+
+
+        <tr>
           <th>Address</th>
+            {% for item in addresses %}
+            
+                <td>{{item}}</td>     
+            {% endfor %}
+
+        </tr>
+
+        <tr>
           <th>Price</th>
-        </tr>
-        <tr>
-            {% for item in mls %}
-            
-                <td>{{item}}</td>
-        
-            {% endfor %}
-
-        </tr>
-        <tr>
-            {% for item in mls %}
-            
-                <td>{{item}}</td>
-        
-            {% endfor %}
-
-        </tr>
-
-        <tr>
             {% for item in price %}
             
                 <td>{{item}}</td>
@@ -72,6 +88,10 @@
 
 
 
+</p>
+
+<p>
+  {{soup}}
 </p>
 
 

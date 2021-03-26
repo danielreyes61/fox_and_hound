@@ -1,4 +1,3 @@
-# agent sites :   https://www.watkinsrealestateteam.com/    http://www.cbstar.com/    https://www.c21home.com/
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -13,15 +12,13 @@ options.add_experimental_option('excludeSwitches', ['enable-logging']) # used to
 options.headless = True
 DRIVER_PATH = './chromedriver'
 driver = webdriver.Chrome(executable_path=DRIVER_PATH, options=options)
+
+
 driver.get('https://www.watkinsrealestateteam.com/listings-search/')
-
-
 html = driver.page_source
-
 soup = BeautifulSoup(html,'lxml')
-
-
-
+with open("page.html", 'w', encoding='utf-8-sig') as f:
+    f.write(str(soup))
 
 mls_id = soup.select('span.pl_listing-mlsId')
 mls_nums = [item.text for item in mls_id]
@@ -29,13 +26,12 @@ mls_nums = [item.text for item in mls_id]
 price = soup.select('span.pl_listing-price')
 price_list = [item.text for item in price]
 
-
-#address = soup.select(['a']['class'])   ----------------- Address not working
-
-#print(address)
-# price_list = [item.text for item in price]
+listing_image = soup.find_all('meta', attrs={"itemprop":"image"})
+listing_image = [item['content'] for item in listing_image]
 
 
+addresses = soup.select("a.pl_listing-address")
+addresses = [item.text for item in addresses]
 
 
 
@@ -43,7 +39,7 @@ price_list = [item.text for item in price]
 app = Flask(__name__)
 @app.route('/')
 def home():
-    return render_template("index.html", mls=mls_nums, price=price_list)
+    return render_template("index.html", mls=mls_nums, price=price_list, listing_image=listing_image, addresses=addresses)
 
 
 if __name__ == '__main__':
